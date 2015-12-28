@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width,target-densitydpi=device-dpi,user-scalable=no">
+<title>移动端无缝图片轮播</title>
+<script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.js"></script>
+<script src="js/yzl-tween.js"></script>
+<script>
+    $("html").css("font-size",$(window).width()/10+"px");
+</script>
+<style>
+    *{margin: 0; padding: 0;}   
+    html{font-size: 100px;}
+    .box{width: 100%; overflow: hidden;}
+    .list{width: 80rem; overflow: hidden;}
+    .list li{float: left; list-style: none;}
+    .list li img{width: 10rem; display: block;}
+    .list a{display: block;}
+    .nav{text-align: center; padding: 0.2rem 0;}
+    .nav span{display: inline-block; width: .2rem; height: .2rem; border-radius: .2rem; border: 1px solid #000; vertical-align: top;}
+    .nav .on{background: #F00;}
+</style>
+</head>
+<body>
+    <div class="box">
+        <ul class="list" id="picList">
+            <li>
+                <a data-href="http://baidu.com" ontouchmove="this.s=1" ontouchend="this.s||window.open(this.dataset.href),this.s=0">
+                    <img src="images/1.jpg">
+                </a>
+            </li>
+            <li>
+                <a data-href="http://baidu.com" ontouchmove="this.s=1" ontouchend="this.s||window.open(this.dataset.href),this.s=0">
+                    <img src="images/2.jpg">
+                </a>
+            </li>
+            <li>
+                <a data-href="http://baidu.com" ontouchmove="this.s=1" ontouchend="this.s||window.open(this.dataset.href),this.s=0">
+                    <img src="images/3.jpg">
+                </a>
+            </li>
+            <li>
+                <a data-href="http://baidu.com" ontouchmove="this.s=1" ontouchend="this.s||window.open(this.dataset.href),this.s=0">
+                    <img src="images/4.jpg">
+                </a>
+            </li>
+        </ul>
+    </div>
+    <p class="nav" id="btns">
+        <span class="on"></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </p>
+    <script>
+    window.onload = function(){
+        var oPicList = document.getElementById("picList");
+        var aBtns = document.getElementById("btns").children;
+        var iStartX=0;
+        var iStartScroll=0;
+        var iScroll=0;
+        var iDis = 0;
+        var iNow = 0;
+        oPicList.innerHTML += oPicList.innerHTML;
+
+        document.addEventListener("touchmove",function(e){
+            e.preventDefault();
+        });
+        oPicList.addEventListener("touchstart", function(e){
+            if(iNow<=0){
+                iNow += aBtns.length;
+                iScroll = -iNow*window.screen.width;
+                css(oPicList, "translateX", iScroll);
+            }
+            iStartX = e.changedTouches[0].pageX;
+            iStartScroll = iScroll;
+        });
+        oPicList.addEventListener("touchmove",function(e){
+            iDis=e.changedTouches[0].pageX-iStartX;
+            iScroll=iStartScroll+iDis;
+            css(oPicList, "translateX", iScroll);
+        });
+        oPicList.addEventListener("touchend", function(e){
+            iNow = -(iScroll/window.screen.width);
+            iNow = iNow%1<0.3?Math.floor(iNow):Math.ceil(iNow);
+            // if(iNow < 0){
+            //     iNow = 0;
+            // }
+            // if(iNow > aBtns.length-1){
+            //     iNow = aBtns.length-1;
+            // }
+            iScroll = -iNow*window.screen.width;
+            if(iNow>=aBtns.length){
+                tweenMove(oPicList,{translateX:iScroll},300,"easeOut",function(){
+                    iNow = iNow%aBtns.length;
+                    iScroll = -iNow*window.screen.width;
+                    css(oPicList, "translateX", iScroll);
+                });
+            }else{
+                tweenMove(oPicList,{translateX:iScroll},300,"easeOut");
+            }
+            for(var i=0; i<aBtns.length; i++){
+                aBtns[i].className = "";
+            }
+            aBtns[iNow%aBtns.length].className="on";
+        });
+
+        function toStyle(){
+            oPicList.style.WebkitTransform="translateX("+iScroll+"px)";
+        }
+    }
+    </script>
+</body>
+</html>
+    

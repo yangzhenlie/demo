@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>四级地区联动</title>
+	<meta charset="UTF8" />
+	<style>
+		.w120{width: 120px; margin-right: 5px;}
+	</style>
+	<script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="js/area.js"></script>
+	<script>
+		$(function(){
+
+			// 初始化插件
+			area.init({
+				type : '4',	//联动类型，比如四级联动(type : '4')，三级联动(type : '3')...
+				objBox : $(".area"), //联动盒子
+				url : 'js/area.json', //数据链接
+				objClass : 'w120', //select加入class
+				defaultText : '请选择' //初始化select文本
+			});
+
+		})
+	</script>
+</head>
+<body>
+	
+	<div class="area"></div>
+
+</body>
+</html>

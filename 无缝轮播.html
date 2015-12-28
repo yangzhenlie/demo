@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>无缝轮播</title>
+	<meta charset="utf-8" />
+	<style>
+		*{margin: 0; padding: 0;}
+		.box,.btn{width: 500px; margin: 0 auto;}
+		.btn{text-align: center;}
+		.num a{display: inline-block; margin: 10px 5px; width: 15px; height: 15px; background: #F90; border-radius: 50%;}
+		.num a.active{background: #F00;}
+		.box{height: 300px; overflow: hidden; margin-top: 100px;}
+		.box ul{float: left; position: relative; left: 0;}
+		.box li{list-style: none; width: 500px; height: 300px; float: left; color: #FFF; font-size: 50px; text-align: center; line-height: 300px; font-weight: bold;}
+		.box li.l1{background: #A90;}
+		.box li.l2{background: #F00;}
+		.box li.l3{background: #F90;}
+	</style>
+	<script src="http://apps.bdimg.com/libs/jquery/1.9.0/jquery.min.js"></script>
+	<script>
+
+		$(function(){
+
+			var _length = $("li").length*2;
+			var _width = $("li").width();
+			var zWidth = _width * _length;
+			var _left = 0;
+
+			$("ul").append($("ul").html()).css("width", zWidth);
+
+
+			$(".next").click(function(){
+				_left = parseInt( $("ul").css("left") ) - _width;
+				showMove(_left);
+			});
+
+			$(".prev").click(function(){
+				_left = parseInt( $("ul").css("left") ) + _width;
+				showMove(_left);
+			});
+
+			function showMove(_left){
+				if($("ul").is(":animated")){return;}
+
+				$("ul").animate({
+					left : _left
+				},500,function(){
+					if( parseInt($("ul").css("left")) == 0 ){
+						$("ul").css("left",-_length/2*_width)
+					}else if( parseInt($("ul").css("left")) == -(_length-1)*_width ){
+						$("ul").css("left",-(_length/2-1)*_width)
+					}
+
+					var _index =  Math.abs(parseInt($("ul").css("left"))/_width)+1;
+					if(_index>_length/2){
+						$(".num a").eq(_index-_length/2-1).addClass("active").siblings().removeClass("active");
+					}else{
+						$(".num a").eq(_index-1).addClass("active").siblings().removeClass("active");
+					}
+				});
+
+			}
+
+		})
+
+	</script>
+</head>
+<body>
+	<div class="box">
+		<ul>
+			<li class="l1">第一张</li>
+			<li class="l2">第二张</li>
+			<li class="l3">第三张</li>
+		</ul>
+	</div>
+	<div class="btn">
+		<div class="num">
+			<a href="javascript:;" class="active"></a>
+			<a href="javascript:;"></a>
+			<a href="javascript:;"></a>
+		</div>
+		<button class="prev">上一张</button>
+		<button class="next">下一张</button>
+	</div>
+</body>
+</html>
