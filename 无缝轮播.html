@@ -35,6 +35,9 @@
 			});
 
 			$(".prev").click(function(){
+				if( parseInt($("ul").css("left")) == 0 ){
+					$("ul").css("left",-_length/2*_width)
+				}
 				_left = parseInt( $("ul").css("left") ) + _width;
 				showMove(_left);
 			});
